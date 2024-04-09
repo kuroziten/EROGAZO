@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エロ画像見るためのやつ</title>
+</head>
+
+<body>
+    <% for (f of list.split(",")) { %>
+        <div>
+            <img src="<%= f %>">
+        </div>
+        <% } %>
+</body>
+<style>
+    body {
+        margin: 0;
+
+        div {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            box-sizing: border-box;
+            overflow: hidden;
+            border: 1px solid black;
+            img {
+                object-fit: contain;
+                width: 100%;
+            }
+        }
+    }
+</style>
+<script>
+
+    window.onload = (event) => {
+        document.addEventListener('keydown', keypress_ivent);
+        function keypress_ivent(e) {
+            console.log(e.key);
+            if (/^(ArrowDown|ArrowLeft)$/.test(e.key)) {
+                e.preventDefault();
+                for (let div of document.querySelectorAll("div")) {
+                    if (div.getBoundingClientRect().top > 0) {
+                        scrollBy(0, div.getBoundingClientRect().top);
+                        return;
+                    }
+                }
+            } else if (/^(ArrowUp|ArrowRight)$/.test(e.key)) {
+                e.preventDefault();
+                let t = null;
+                for (let div of document.querySelectorAll("div")) {
+                    if (t == null) {
+                        t = div;
+                        continue;
+                    }
+                    const top = div.getBoundingClientRect().top;
+                    if (t.getBoundingClientRect().top < 0 && top >= 0) {
+                        break;
+                    }
+                    t = div;
+                }
+                if (t.getBoundingClientRect().top < 0) {
+                    scrollBy(0, t.getBoundingClientRect().top);
+                    return;
+                }
+            }
+
+        }
+    };
+</script>
+
+</html>
